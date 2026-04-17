@@ -4,6 +4,9 @@ import { Ionicons } from '@expo/vector-icons';
 
 import HomeScreen from '../screens/HomeScreen';
 import ExploreScreen from '../screens/ExploreScreen';
+import CartScreen from '../screens/CartScreen';
+import FavouriteScreen from '../screens/FavouriteScreen';
+
 // Mocks for other tabs
 import { View, Text } from 'react-native';
 
@@ -48,8 +51,8 @@ export default function MainTabs() {
     >
       <Tab.Screen name="Shop" component={HomeScreen} />
       <Tab.Screen name="Explore" component={ExploreScreen} />
-      <Tab.Screen name="Cart" children={() => <MockScreen name="Cart" />} />
-      <Tab.Screen name="Favourite" children={() => <MockScreen name="Favourite" />} />
+      <Tab.Screen name="Cart" component={CartScreen} />
+      <Tab.Screen name="Favourite" component={FavouriteScreen} />
       <Tab.Screen name="Account" children={() => <MockScreen name="Account" />} />
     </Tab.Navigator>
   );

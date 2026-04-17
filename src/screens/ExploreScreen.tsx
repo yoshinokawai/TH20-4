@@ -44,6 +44,9 @@ export default function ExploreScreen() {
           placeholderTextColor="#7C7C7C"
           style={styles.searchInput}
         />
+        <TouchableOpacity onPress={() => navigation.navigate('Filters')}>
+          <Ionicons name="options-outline" size={20} color="#181725" />
+        </TouchableOpacity>
       </View>
 
       <FlatList 

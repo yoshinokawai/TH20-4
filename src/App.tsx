@@ -14,6 +14,7 @@ import SignUpScreen from './screens/SignupScreen';
 import MainTabs from './navigation/MainTabs';
 import BeveragesScreen from './screens/BeveragesScreen';
 import ProductDetailScreen from './screens/ProductDetailScreen';
+import FiltersScreen from './screens/FiltersScreen';
 
 // Định nghĩa kiểu dữ liệu cho Navigation Stack
 export type RootStackParamList = {
@@ -29,6 +30,7 @@ export type RootStackParamList = {
   MainTabs: undefined;
   Beverages: undefined;
   ProductDetail: { product: any };
+  Filters: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -57,6 +59,7 @@ export default function App() {
         <Stack.Screen name="Home" component={MainTabs} options={{ headerShown: false }} />
         <Stack.Screen name="Beverages" component={BeveragesScreen} options={{ headerShown: false }} />
         <Stack.Screen name="ProductDetail" component={ProductDetailScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Filters" component={FiltersScreen} options={{ headerShown: false, presentation: 'modal' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
