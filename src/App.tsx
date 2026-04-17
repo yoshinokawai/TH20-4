@@ -11,7 +11,9 @@ import VerificationScreen from './screens/VerificationScreen';
 import LocationScreen from './screens/LocationScreen';
 import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignupScreen';
-import { Home } from './navigation/screens/Home';
+import MainTabs from './navigation/MainTabs';
+import BeveragesScreen from './screens/BeveragesScreen';
+import ProductDetailScreen from './screens/ProductDetailScreen';
 
 // Định nghĩa kiểu dữ liệu cho Navigation Stack
 export type RootStackParamList = {
@@ -24,6 +26,9 @@ export type RootStackParamList = {
   Login: undefined;
   SignUp: undefined;
   Home: undefined;
+  MainTabs: undefined;
+  Beverages: undefined;
+  ProductDetail: { product: any };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -49,8 +54,9 @@ export default function App() {
         <Stack.Screen name="Verification" component={VerificationScreen} />
         <Stack.Screen name="Location" component={LocationScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Home" component={MainTabs} options={{ headerShown: false }} />
+        <Stack.Screen name="Beverages" component={BeveragesScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="ProductDetail" component={ProductDetailScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
