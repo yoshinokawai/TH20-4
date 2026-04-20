@@ -2,47 +2,59 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, StatusBar, Image, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import storageService from '../services/storageService';
+
 const SignUpScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  const handleSignup = async () => {
+    if (!username || !email || !password) {
+        alert('Please fill all fields');
+        return;
+    }
+    const userData = { username, email, token: 'dummy-token-' + Date.now() };
+    await storageService.saveUser(userData);
+    alert('Sign Up Successful!');
+    navigation.replace('Home');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.content}>
-          {/* Logo */}
-          <View style={styles.logoContainer}>
-            <Image 
-              source={require('../../assets/images/Logo.png')} 
-              style={styles.logo} 
-              resizeMode="contain"
-            />
-          </View>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+        <View style={styles.logoContainer}>
+          <Image 
+            source={require('../../assets/images/Logo.png')} 
+            style={styles.logo} 
+            resizeMode="contain"
+          />
+        </View>
 
+        <View style={styles.headerText}>
           <Text style={styles.title}>Sign Up</Text>
           <Text style={styles.subtitle}>Enter your credentials to continue</Text>
+        </View>
 
-          {/* Input Username */}
+        <View style={styles.inputContainer}>
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Username</Text>
             <TextInput
               style={styles.input}
-              placeholder="Enter your username"
+              placeholder="Afsar Hossen Shuvo"
               placeholderTextColor="#7C7C7C"
               value={username}
               onChangeText={setUsername}
             />
           </View>
 
-          {/* Input Email */}
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Email</Text>
             <TextInput
               style={styles.input}
-              placeholder="Enter your email"
+              placeholder="imshuvo97@gmail.com"
               placeholderTextColor="#7C7C7C"
               keyboardType="email-address"
               autoCapitalize="none"
@@ -51,13 +63,12 @@ const SignUpScreen = ({ navigation }) => {
             />
           </View>
 
-          {/* Input Password */}
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Password</Text>
             <View style={styles.passwordContainer}>
               <TextInput
                 style={styles.passwordInput}
-                placeholder="Enter your password"
+                placeholder="********"
                 placeholderTextColor="#7C7C7C"
                 secureTextEntry={!showPassword}
                 value={password}
@@ -73,7 +84,6 @@ const SignUpScreen = ({ navigation }) => {
             </View>
           </View>
 
-          {/* Điều khoản dịch vụ */}
           <View style={styles.termsContainer}>
             <Text style={styles.termsText}>
               By continuing you agree to our{' '}
@@ -82,16 +92,14 @@ const SignUpScreen = ({ navigation }) => {
             </Text>
           </View>
 
-          {/* Nút Sign Up */}
           <TouchableOpacity 
             style={styles.signupButton}
             activeOpacity={0.8}
-            onPress={() => alert('Đăng ký thành công!')}
+            onPress={handleSignup}
           >
             <Text style={styles.signupButtonText}>Sign Up</Text>
           </TouchableOpacity>
 
-          {/* Link quay lại Login */}
           <View style={styles.loginContainer}>
             <Text style={styles.loginText}>Already have an account? </Text>
             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
@@ -107,21 +115,24 @@ const SignUpScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FCFCFC',
+    backgroundColor: '#fff',
   },
-  content: {
-    flex: 1,
+  scrollContent: {
     paddingHorizontal: 25,
-    paddingTop: 30,
     paddingBottom: 40,
+    alignItems: 'center',
   },
   logoContainer: {
-    alignItems: 'center',
-    marginBottom: 50,
+    marginTop: 40,
+    marginBottom: 40,
   },
   logo: {
-    width: 50,
-    height: 50,
+    width: 47,
+    height: 55,
+  },
+  headerText: {
+    width: '100%',
+    marginBottom: 40,
   },
   title: {
     fontSize: 26,
@@ -132,7 +143,9 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 16,
     color: '#7C7C7C',
-    marginBottom: 40,
+  },
+  inputContainer: {
+    width: '100%',
   },
   inputGroup: {
     marginBottom: 30,
@@ -149,7 +162,6 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     fontSize: 18,
     color: '#181725',
-    fontWeight: '500',
   },
   passwordContainer: {
     flexDirection: 'row',
@@ -162,7 +174,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     color: '#181725',
-    fontWeight: '500',
   },
   termsContainer: {
     marginBottom: 30,
@@ -183,6 +194,7 @@ const styles = StyleSheet.create({
     borderRadius: 19,
     alignItems: 'center',
     marginBottom: 25,
+    marginTop: 10,
   },
   signupButtonText: {
     color: '#FFF',

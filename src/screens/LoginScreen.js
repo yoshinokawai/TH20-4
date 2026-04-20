@@ -2,10 +2,19 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, StatusBar, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import storageService from '../services/storageService';
+
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleLogin = async () => {
+    // Giả lập login thành công
+    const userData = { email, token: 'dummy-token-' + Date.now() };
+    await storageService.saveUser(userData);
+    navigation.replace('Home');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -70,11 +79,11 @@ const LoginScreen = ({ navigation }) => {
         <TouchableOpacity 
           style={styles.loginButton}
           activeOpacity={0.8}
-          // Tạm thời chuyển sang Home khi bấm Đăng nhập
-          onPress={() => navigation.navigate('Home')} 
+          onPress={handleLogin} 
         >
           <Text style={styles.loginButtonText}>Log In</Text>
         </TouchableOpacity>
+
 
         {/* Chuyển sang trang Đăng Ký */}
         <View style={styles.signupContainer}>
@@ -97,6 +106,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 25,
     paddingTop: 30,
+    width: '100%',
+    maxWidth: 500,
+    alignSelf: 'center',
   },
   logoContainer: {
     alignItems: 'center',
