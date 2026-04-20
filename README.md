@@ -3,12 +3,11 @@
 ## **Lớp: D18CNMP4**
 
 ## Demo Video:
-[![Watch the Demo Video](Demo/23810310260_09_Profile.png)](TH_20_4_23810310260_Demo.mp4)
-*(Nhấn vào ảnh trên để xem hoặc tải video demo)*
 
-<video src="TH_20_4_23810310260_Demo.mp4" controls="controls" style="max-width: 100%;">
-  Your browser does not support the video tag.
-</video>
+### 📦 [TẢI XUỐNG VIDEO DEMO (File .7z)](TH_20_4_23810310260_Demo.7z)
+
+[![Download Demo Video](Demo/23810310260_09_Profile.png)](TH_20_4_23810310260_Demo.7z)
+*(Lưu ý: Đây là file nén .7z, bạn hãy tải về và giải nén để xem video demo)*
 
 ## Demo Images:
 ![image](Demo/23810310260_01_login.jpg)
