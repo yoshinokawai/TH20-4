@@ -1,47 +1,58 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, Alert, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { products } from '../data';
+import { useCart } from '../context/CartContext';
+import { useNavigation } from '@react-navigation/native';
+import CheckoutModal from '../components/CheckoutModal';
+import FailureModal from '../components/FailureModal';
 
 const PRIMARY_COLOR = '#53B175';
 
-// Mock some initial cart items from the products list
-const initialCart = [
-  { ...products.find(p => p.id === '3'), quantity: 1 }, // Bell Pepper Red
-  { ...products.find(p => p.id === '5'), quantity: 1 }, // Egg Chicken Red
-  { ...products.find(p => p.id === '1'), quantity: 1 }, // Organic Bananas
-  { ...products.find(p => p.id === '4'), quantity: 1 }, // Ginger
-].filter(p => !!p.id) as any[];
-
 export default function CartScreen() {
-  const [cartItems, setCartItems] = useState(initialCart);
+  const navigation = useNavigation<any>();
+  const { cartItems, updateQuantity, removeFromCart, totalPrice, checkout } = useCart();
+  
+  const [checkoutVisible, setCheckoutVisible] = useState(false);
+  const [failureVisible, setFailureVisible] = useState(false);
 
-  const updateQuantity = (id: string, delta: number) => {
-    setCartItems(cartItems.map(item => {
-      if (item.id === id) {
-        return { ...item, quantity: Math.max(1, item.quantity + delta) };
-      }
-      return item;
-    }));
+  const handleOpenCheckout = () => {
+    if (cartItems.length > 0) {
+        setCheckoutVisible(true);
+    }
   };
 
-  const removeItem = (id: string) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
+  const handlePlaceOrder = async () => {
+    setCheckoutVisible(false);
+    
+    // Simulate a failure chance (e.g., 20%)
+    const isSuccess = Math.random() > 0.2;
+    
+    if (isSuccess) {
+        await checkout();
+        navigation.navigate('OrderAccepted');
+    } else {
+        setFailureVisible(true);
+    }
   };
 
-  const total = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-
-  const handleCheckout = () => {
-    Alert.alert("Checkout", "Your order has been placed successfully!", [{ text: "OK" }]);
+  const handleTryAgain = () => {
+    setFailureVisible(false);
+    setCheckoutVisible(true);
   };
+
+  const handleBackToHome = () => {
+    setFailureVisible(false);
+    navigation.navigate('Home');
+  };
+
 
   const renderItem = ({ item }: { item: any }) => (
     <View style={styles.cartItem}>
-      <Image source={{ uri: item.image }} style={styles.itemImage} />
+      <Image source={typeof item.image === 'string' ? { uri: item.image } : item.image} style={styles.itemImage} />
       <View style={styles.itemContent}>
         <View style={styles.titleRow}>
           <Text style={styles.itemTitle}>{item.name}</Text>
-          <TouchableOpacity onPress={() => removeItem(item.id)}>
+          <TouchableOpacity onPress={() => removeFromCart(item.id)}>
             <Ionicons name="close" size={24} color="#B3B3B3" />
           </TouchableOpacity>
         </View>
@@ -63,37 +74,53 @@ export default function CartScreen() {
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>My Cart</Text>
-      </View>
-
-      <FlatList 
-        data={cartItems}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.listContainer}
-        showsVerticalScrollIndicator={false}
-        ItemSeparatorComponent={() => <View style={styles.divider} />}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Ionicons name="cart-outline" size={64} color="#E2E2E2" />
-            <Text style={styles.emptyText}>Your cart is empty</Text>
-          </View>
-        }
-      />
-
-      {cartItems.length > 0 && (
-        <View style={styles.bottomContainer}>
-          <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
-            <Text style={styles.checkoutText}>Go to Checkout</Text>
-            <View style={styles.totalBadge}>
-              <Text style={styles.totalBadgeText}>${total.toFixed(2)}</Text>
-            </View>
-          </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>My Cart</Text>
         </View>
-      )}
-    </View>
+
+        <FlatList 
+          data={cartItems}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          contentContainerStyle={styles.listContainer}
+          showsVerticalScrollIndicator={false}
+          ItemSeparatorComponent={() => <View style={styles.divider} />}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Ionicons name="cart-outline" size={64} color="#E2E2E2" />
+              <Text style={styles.emptyText}>Your cart is empty</Text>
+            </View>
+          }
+        />
+
+        {cartItems.length > 0 && (
+          <View style={styles.bottomContainer}>
+            <TouchableOpacity style={styles.checkoutButton} onPress={handleOpenCheckout}>
+              <Text style={styles.checkoutText}>Go to Checkout</Text>
+              <View style={styles.totalBadge}>
+                <Text style={styles.totalBadgeText}>${totalPrice.toFixed(2)}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        <CheckoutModal 
+          visible={checkoutVisible}
+          onClose={() => setCheckoutVisible(false)}
+          onPlaceOrder={handlePlaceOrder}
+          totalPrice={totalPrice}
+        />
+
+        <FailureModal 
+            visible={failureVisible}
+            onClose={() => setFailureVisible(false)}
+            onTryAgain={handleTryAgain}
+            onBackToHome={handleBackToHome}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -101,6 +128,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    width: '100%',
+    maxWidth: 800,
+    alignSelf: 'center',
   },
   header: {
     paddingVertical: 20,
