@@ -3,7 +3,7 @@
 ## **Lớp: D18CNMP4**
 
 ## Demo Video:
-![Demo Video](https://github.com/yoshinokawai/TH11-4/raw/main/screen-20260411-212330.mp4)
+![Demo Video](TH_20_4_23810310260_Demo.7z)
 
 ## Demo Images:
 ![image](Demo/23810310260-01.jpg)

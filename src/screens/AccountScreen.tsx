@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, SafeAreaView, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, SafeAreaView, Alert, Platform } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import storageService from '../services/storageService';
 
@@ -17,6 +17,15 @@ export default function AccountScreen({ navigation }: any) {
   }, []);
 
   const handleLogout = async () => {
+    if (Platform.OS === 'web') {
+      const confirmed = window.confirm("Are you sure you want to log out?");
+      if (confirmed) {
+        await storageService.removeUser();
+        navigation.replace('SignIn');
+      }
+      return;
+    }
+
     Alert.alert(
       "Log Out",
       "Are you sure you want to log out?",

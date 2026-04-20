@@ -6,7 +6,7 @@ export const products = [
     price: 4.99,
     category: 'Fruits & Vegetable',
     brand: 'Individual',
-    image: require('../assets/images/Marketside-Fresh-Organic-Bananas-Bunch.avif'),
+    image: require('../assets/images/organic_bananas.avif'),
     description: 'Fresh organic bananas picked from the best farms.'
   },
   {
@@ -16,7 +16,7 @@ export const products = [
     price: 4.99,
     category: 'Fruits & Vegetable',
     brand: 'Individual',
-    image: require('../assets/images/Red apple.jpg'),
+    image: require('../assets/images/red_apple.jpg'),
     description: 'Crisp and sweet red apples.'
   },
   {
@@ -26,7 +26,7 @@ export const products = [
     price: 4.99,
     category: 'Fruits & Vegetable',
     brand: 'Individual',
-    image: require('../assets/images/Bell Pepper Red.jpg'),
+    image: require('../assets/images/bell_pepper_red.jpg'),
     description: 'Vibrant red bell peppers, perfect for salads and cooking.'
   },
   {
@@ -46,7 +46,7 @@ export const products = [
     price: 1.99,
     category: 'Dairy & Eggs',
     brand: 'Kazi Farmas',
-    image: require('../assets/images/Egg Chicken Red.jpg'),
+    image: require('../assets/images/egg_chicken_red.jpg'),
     description: 'High quality local farm fresh eggs.'
   },
   {
@@ -56,7 +56,7 @@ export const products = [
     price: 1.99,
     category: 'Beverages',
     brand: 'Cocola',
-    image: require('../assets/images/Diet Coke.jpg'),
+    image: require('../assets/images/diet_coke.jpg'),
     description: 'Sugar-free refreshment.'
   },
   {
@@ -66,7 +66,7 @@ export const products = [
     price: 1.50,
     category: 'Beverages',
     brand: 'Cocola',
-    image: require('../assets/images/Sprite Can.jpg'),
+    image: require('../assets/images/sprite_can.jpg'),
     description: 'Lemon-lime soda.'
   },
   {
@@ -76,7 +76,7 @@ export const products = [
     price: 15.50,
     category: 'Beverages',
     brand: 'Individual',
-    image: require('../assets/images/Apple & Grape Juice.jpg'),
+    image: require('../assets/images/apple_grape_juice.jpg'),
     description: 'Fruit juice blend.'
   },
   {
@@ -86,7 +86,7 @@ export const products = [
     price: 4.99,
     category: 'Beverages',
     brand: 'Cocola',
-    image: require('../assets/images/Coca Cola Can.jpg'),
+    image: require('../assets/images/coca_cola_can.jpg'),
     description: 'Classic Coca Cola.'
   },
   {
@@ -96,7 +96,7 @@ export const products = [
     price: 4.99,
     category: 'Beverages',
     brand: 'Cocola',
-    image: require('../assets/images/Pepsi Can.jpg'),
+    image: require('../assets/images/pepsi_can.jpg'),
     description: 'Refreshing Pepsi.'
   },
   {
@@ -106,7 +106,7 @@ export const products = [
     price: 3.50,
     category: 'Bakery & Snacks',
     brand: 'Cocola',
-    image: require('../assets/images/Egg Noodles.jpg'),
+    image: require('../assets/images/egg_noodles.jpg'),
     description: 'Delicious egg noodles for quick meals.'
   },
   {
