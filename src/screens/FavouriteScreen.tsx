@@ -1,30 +1,23 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, Alert, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { products } from '../data';
+import { useCart } from '../context/CartContext';
 
 const PRIMARY_COLOR = '#53B175';
 
-// Mock some favorite items from the products list
-const favouriteItems = [
-  { ...products.find(p => p.id === '7') }, // Sprite Can
-  { ...products.find(p => p.id === '6') }, // Diet Coke
-  { ...products.find(p => p.id === '8') }, // Apple & Grape Juice
-  { ...products.find(p => p.id === '9') }, // Coca Cola Can
-  { ...products.find(p => p.id === '10') }, // Pepsi Can
-].filter(p => !!p.id) as any[];
-
 export default function FavouriteScreen() {
   const navigation = useNavigation<any>();
+  const { favouriteItems, addAllToCart } = useCart();
 
   const handleAddAllToCart = () => {
+    addAllToCart(favouriteItems);
     Alert.alert("Cart", "All items have been added to your cart!", [{ text: "OK" }]);
   };
 
   const renderItem = ({ item }: { item: any }) => (
     <View style={styles.favouriteItem}>
-      <Image source={{ uri: item.image }} style={styles.itemImage} />
+      <Image source={typeof item.image === 'string' ? { uri: item.image } : item.image} style={styles.itemImage} />
       <View style={styles.itemContent}>
         <View style={styles.titleRow}>
           <Text style={styles.itemTitle}>{item.name}</Text>
@@ -41,34 +34,36 @@ export default function FavouriteScreen() {
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Favourite</Text>
-      </View>
-
-      <FlatList 
-        data={favouriteItems}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.listContainer}
-        showsVerticalScrollIndicator={false}
-        ItemSeparatorComponent={() => <View style={styles.divider} />}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Ionicons name="heart-outline" size={64} color="#E2E2E2" />
-            <Text style={styles.emptyText}>No favorite items yet</Text>
-          </View>
-        }
-      />
-
-      {favouriteItems.length > 0 && (
-        <View style={styles.bottomContainer}>
-          <TouchableOpacity style={styles.addAllButton} onPress={handleAddAllToCart}>
-            <Text style={styles.addAllText}>Add All To Cart</Text>
-          </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Favourite</Text>
         </View>
-      )}
-    </View>
+
+        <FlatList 
+          data={favouriteItems}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          contentContainerStyle={styles.listContainer}
+          showsVerticalScrollIndicator={false}
+          ItemSeparatorComponent={() => <View style={styles.divider} />}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Ionicons name="heart-outline" size={64} color="#E2E2E2" />
+              <Text style={styles.emptyText}>No favorite items yet</Text>
+            </View>
+          }
+        />
+
+        {favouriteItems.length > 0 && (
+          <View style={styles.bottomContainer}>
+            <TouchableOpacity style={styles.addAllButton} onPress={handleAddAllToCart}>
+              <Text style={styles.addAllText}>Add All To Cart</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -76,6 +71,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    width: '100%',
+    maxWidth: 800,
+    alignSelf: 'center',
   },
   header: {
     paddingVertical: 20,

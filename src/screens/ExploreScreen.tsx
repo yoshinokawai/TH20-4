@@ -1,16 +1,20 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, FlatList, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, FlatList, Dimensions, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { products, categories } from '../data';
+import { useCart } from '../context/CartContext';
 
+const MAX_WIDTH = 800;
 const PRIMARY_COLOR = '#53B175';
-const { width } = Dimensions.get('window');
-const COLUMN_WIDTH = (width - 50) / 2;
+const { width: windowWidth } = Dimensions.get('window');
+const contentWidth = Math.min(windowWidth, MAX_WIDTH);
+const COLUMN_WIDTH = (contentWidth - 50) / 2;
 
 export default function ExploreScreen() {
   const navigation = useNavigation<any>();
   const [searchText, setSearchText] = useState('');
+  const { addToCart } = useCart();
 
   const filteredProducts = useMemo(() => {
     if (!searchText.trim()) return [];
@@ -36,12 +40,12 @@ export default function ExploreScreen() {
       style={styles.productCard}
       onPress={() => navigation.navigate('ProductDetail', { product: item })}
     >
-      <Image source={{ uri: item.image }} style={styles.productImage} />
+      <Image source={typeof item.image === 'string' ? { uri: item.image } : item.image} style={styles.productImage} />
       <Text style={styles.productTitle}>{item.name}</Text>
       <Text style={styles.productVolume}>{item.volume}</Text>
       <View style={styles.productBottom}>
         <Text style={styles.productPrice}>${item.price.toFixed(2)}</Text>
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity style={styles.addButton} onPress={() => addToCart(item)}>
           <Ionicons name="add" size={24} color="#FFF" />
         </TouchableOpacity>
       </View>
@@ -49,49 +53,51 @@ export default function ExploreScreen() {
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.headerTitle}>Find Products</Text>
-      
-      {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color="#7C7C7C" style={styles.searchIcon} />
-        <TextInput 
-          placeholder="Search Store" 
-          placeholderTextColor="#7C7C7C"
-          style={styles.searchInput}
-          value={searchText}
-          onChangeText={setSearchText}
-        />
-        <TouchableOpacity onPress={() => navigation.navigate('Filters')}>
-          <Ionicons name="options-outline" size={20} color="#181725" />
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <Text style={styles.headerTitle}>Find Products</Text>
+        
+        {/* Search Bar */}
+        <View style={styles.searchContainer}>
+          <Ionicons name="search" size={20} color="#7C7C7C" style={styles.searchIcon} />
+          <TextInput 
+            placeholder="Search Store" 
+            placeholderTextColor="#7C7C7C"
+            style={styles.searchInput}
+            value={searchText}
+            onChangeText={setSearchText}
+          />
+          <TouchableOpacity onPress={() => navigation.navigate('Filters')}>
+            <Ionicons name="options-outline" size={20} color="#181725" />
+          </TouchableOpacity>
+        </View>
 
-      {searchText.trim() === '' ? (
-        <FlatList 
-          data={categories}
-          renderItem={renderCategory}
-          keyExtractor={item => item.id}
-          numColumns={2}
-          contentContainerStyle={styles.listContainer}
-          showsVerticalScrollIndicator={false}
-        />
-      ) : (
-        <FlatList 
-          data={filteredProducts}
-          renderItem={renderProduct}
-          keyExtractor={item => item.id}
-          numColumns={2}
-          contentContainerStyle={styles.listContainer}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>No products found for "{searchText}"</Text>
-            </View>
-          }
-        />
-      )}
-    </View>
+        {searchText.trim() === '' ? (
+          <FlatList 
+            data={categories}
+            renderItem={renderCategory}
+            keyExtractor={item => item.id}
+            numColumns={2}
+            contentContainerStyle={styles.listContainer}
+            showsVerticalScrollIndicator={false}
+          />
+        ) : (
+          <FlatList 
+            data={filteredProducts}
+            renderItem={renderProduct}
+            keyExtractor={item => item.id}
+            numColumns={2}
+            contentContainerStyle={styles.listContainer}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <View style={styles.emptyContainer}>
+                <Text style={styles.emptyText}>No products found for "{searchText}"</Text>
+              </View>
+            }
+          />
+        )}
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -99,6 +105,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    width: '100%',
+    maxWidth: MAX_WIDTH,
+    alignSelf: 'center',
   },
   headerTitle: {
     fontSize: 20,

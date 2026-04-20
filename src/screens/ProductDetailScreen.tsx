@@ -2,21 +2,25 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useCart } from '../context/CartContext';
 
 const PRIMARY_COLOR = '#53B175';
 
 export default function ProductDetailScreen() {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
+  const { addToCart, toggleFavourite, isFavourite } = useCart();
   
-  // Try to get product from route params, else fallback to mock
-  const product = route.params?.product || {
-    title: 'Naturel Red Apple',
-    volume: '1kg, Price',
-    price: '$4.99',
-    image: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6fac6?w=800&q=80',
-    description: 'Apples are nutritious. Apples may be good for weight loss. apples may be good for your heart. As part of a healtful and varied diet.'
-  };
+  // Try to get product from route params
+  const product = route.params?.product;
+
+  if (!product) {
+    return (
+      <View style={styles.container}>
+        <Text>Product not found</Text>
+      </View>
+    );
+  }
 
   const [quantity, setQuantity] = useState(1);
   const [isDetailExpanded, setIsDetailExpanded] = useState(true);
@@ -36,15 +40,19 @@ export default function ProductDetailScreen() {
 
         {/* Product Image */}
         <View style={styles.imageContainer}>
-          <Image source={{ uri: product.image }} style={styles.productImage} />
+          <Image source={typeof product.image === 'string' ? { uri: product.image } : product.image} style={styles.productImage} />
         </View>
 
         <View style={styles.contentContainer}>
           {/* Title & Favorite */}
           <View style={styles.titleRow}>
-            <Text style={styles.title}>{product.title}</Text>
-            <TouchableOpacity>
-              <Ionicons name="heart-outline" size={28} color="#7C7C7C" />
+            <Text style={styles.title}>{product.name}</Text>
+            <TouchableOpacity onPress={() => toggleFavourite(product)}>
+              <Ionicons 
+                name={isFavourite(product.id) ? "heart" : "heart-outline"} 
+                size={28} 
+                color={isFavourite(product.id) ? PRIMARY_COLOR : "#7C7C7C"} 
+              />
             </TouchableOpacity>
           </View>
           <Text style={styles.volume}>{product.volume}</Text>
@@ -62,7 +70,7 @@ export default function ProductDetailScreen() {
                 <Ionicons name="add" size={24} color={PRIMARY_COLOR} />
               </TouchableOpacity>
             </View>
-            <Text style={styles.price}>{product.price}</Text>
+            <Text style={styles.price}>${(product.price * quantity).toFixed(2)}</Text>
           </View>
 
           <View style={styles.divider} />
@@ -115,7 +123,7 @@ export default function ProductDetailScreen() {
 
       {/* Fixed Bottom Button */}
       <View style={styles.bottomContainer}>
-        <TouchableOpacity style={styles.addToBasketButton}>
+        <TouchableOpacity style={styles.addToBasketButton} onPress={() => addToCart(product)}>
           <Text style={styles.addToBasketText}>Add To Basket</Text>
         </TouchableOpacity>
       </View>
@@ -127,6 +135,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    width: '100%',
+    maxWidth: 800,
+    alignSelf: 'center',
   },
   header: {
     flexDirection: 'row',

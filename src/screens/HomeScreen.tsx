@@ -1,34 +1,30 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, Image, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TextInput, Image, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { products } from '../data';
+import { useCart } from '../context/CartContext';
 
 const PRIMARY_COLOR = '#53B175';
 
-const exclusiveOffers = [
-  { id: '1', title: 'Organic Bananas', volume: '7pcs, Priceg', price: '$4.99', image: 'https://images.unsplash.com/photo-1603833665858-e61d17a86224?w=400&q=80' },
-  { id: '2', title: 'Red Apple', volume: '1kg, Priceg', price: '$4.99', image: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6fac6?w=400&q=80' },
-];
-
-const bestSelling = [
-  { id: '3', title: 'Bell Pepper Red', volume: '1kg, Priceg', price: '$4.99', image: 'https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=400&q=80' },
-  { id: '4', title: 'Ginger', volume: '250gm, Priceg', price: '$4.99', image: 'https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=400&q=80' },
-];
+const exclusiveOffers = products.slice(0, 6);
+const bestSelling = products.slice(6, 12);
 
 export default function HomeScreen() {
   const navigation = useNavigation<any>();
+  const { addToCart } = useCart();
 
   const renderProductItem = ({ item }: { item: any }) => (
     <TouchableOpacity 
       style={styles.card}
       onPress={() => navigation.navigate('ProductDetail', { product: item })}
     >
-      <Image source={{ uri: item.image }} style={styles.cardImage} />
-      <Text style={styles.cardTitle}>{item.title}</Text>
+      <Image source={typeof item.image === 'string' ? { uri: item.image } : item.image} style={styles.cardImage} />
+      <Text style={styles.cardTitle}>{item.name}</Text>
       <Text style={styles.cardVolume}>{item.volume}</Text>
       <View style={styles.cardBottomRow}>
-        <Text style={styles.cardPrice}>{item.price}</Text>
-        <TouchableOpacity style={styles.addButton} onPress={() => {}}>
+        <Text style={styles.cardPrice}>${item.price.toFixed(2)}</Text>
+        <TouchableOpacity style={styles.addButton} onPress={() => addToCart(item)}>
           <Ionicons name="add" size={24} color="#FFF" />
         </TouchableOpacity>
       </View>
@@ -36,67 +32,69 @@ export default function HomeScreen() {
   );
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Header Location */}
-      <View style={styles.header}>
-        <Ionicons name="location-sharp" size={20} color="#4C4F4D" />
-        <Text style={styles.locationText}>Dhaka, Banassre</Text>
-      </View>
-
-      {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color="#7C7C7C" style={styles.searchIcon} />
-        <TextInput 
-          placeholder="Search Store" 
-          placeholderTextColor="#7C7C7C"
-          style={styles.searchInput}
-        />
-      </View>
-
-      {/* Banner */}
-      <View style={styles.bannerContainer}>
-        <Image 
-          source={{ uri: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80' }} 
-          style={styles.bannerImage} 
-        />
-        <View style={styles.bannerOverlay}>
-          <Text style={styles.bannerTitle}>Fresh Vegetables</Text>
-          <Text style={styles.bannerSubtitle}>Get Up To 40% OFF</Text>
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        {/* Header Location */}
+        <View style={styles.header}>
+          <Ionicons name="location-sharp" size={20} color="#4C4F4D" />
+          <Text style={styles.locationText}>Dhaka, Banassre</Text>
         </View>
-      </View>
 
-      {/* Exclusive Offer */}
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Exclusive Offer</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Explore')}>
-          <Text style={styles.seeAllText}>See all</Text>
-        </TouchableOpacity>
-      </View>
-      <FlatList 
-        data={exclusiveOffers}
-        renderItem={renderProductItem}
-        keyExtractor={item => item.id}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.horizontalList}
-      />
+        {/* Search Bar */}
+        <View style={styles.searchContainer}>
+          <Ionicons name="search" size={20} color="#7C7C7C" style={styles.searchIcon} />
+          <TextInput 
+            placeholder="Search Store" 
+            placeholderTextColor="#7C7C7C"
+            style={styles.searchInput}
+          />
+        </View>
 
-      {/* Best Selling */}
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Best Selling</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Explore')}>
-          <Text style={styles.seeAllText}>See all</Text>
-        </TouchableOpacity>
-      </View>
-      <FlatList 
-        data={bestSelling}
-        renderItem={renderProductItem}
-        keyExtractor={item => item.id}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={[styles.horizontalList, { marginBottom: 30 }]}
-      />
-    </ScrollView>
+        {/* Banner */}
+        <View style={styles.bannerContainer}>
+          <Image 
+            source={{ uri: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80' }} 
+            style={styles.bannerImage} 
+          />
+          <View style={styles.bannerOverlay}>
+            <Text style={styles.bannerTitle}>Fresh Vegetables</Text>
+            <Text style={styles.bannerSubtitle}>Get Up To 40% OFF</Text>
+          </View>
+        </View>
+
+        {/* Exclusive Offer */}
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Exclusive Offer</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Explore')}>
+            <Text style={styles.seeAllText}>See all</Text>
+          </TouchableOpacity>
+        </View>
+        <FlatList 
+          data={exclusiveOffers}
+          renderItem={renderProductItem}
+          keyExtractor={item => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.horizontalList}
+        />
+
+        {/* Best Selling */}
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Best Selling</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Explore')}>
+            <Text style={styles.seeAllText}>See all</Text>
+          </TouchableOpacity>
+        </View>
+        <FlatList 
+          data={bestSelling}
+          renderItem={renderProductItem}
+          keyExtractor={item => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={[styles.horizontalList, { marginBottom: 30 }]}
+        />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -104,6 +102,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  scrollContent: {
+    width: '100%',
+    maxWidth: 800, // Widening for web
+    alignSelf: 'center',
+    paddingBottom: 20,
   },
   header: {
     flexDirection: 'row',

@@ -6,7 +6,7 @@ export const products = [
     price: 4.99,
     category: 'Fruits & Vegetable',
     brand: 'Individual',
-    image: 'https://images.unsplash.com/photo-1603833665858-e61d17a86224?w=400&q=80',
+    image: require('../assets/images/Marketside-Fresh-Organic-Bananas-Bunch.avif'),
     description: 'Fresh organic bananas picked from the best farms.'
   },
   {
@@ -16,7 +16,7 @@ export const products = [
     price: 4.99,
     category: 'Fruits & Vegetable',
     brand: 'Individual',
-    image: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6fac6?w=400&q=80',
+    image: require('../assets/images/Red apple.jpg'),
     description: 'Crisp and sweet red apples.'
   },
   {
@@ -26,7 +26,7 @@ export const products = [
     price: 4.99,
     category: 'Fruits & Vegetable',
     brand: 'Individual',
-    image: 'https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=400&q=80',
+    image: require('../assets/images/Bell Pepper Red.jpg'),
     description: 'Vibrant red bell peppers, perfect for salads and cooking.'
   },
   {
@@ -36,7 +36,7 @@ export const products = [
     price: 2.99,
     category: 'Fruits & Vegetable',
     brand: 'Individual',
-    image: 'https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=400&q=80',
+    image: require('../assets/images/ginger.jpg'),
     description: 'Fresh ginger root for a spicy kick in your meals.'
   },
   {
@@ -46,7 +46,7 @@ export const products = [
     price: 1.99,
     category: 'Dairy & Eggs',
     brand: 'Kazi Farmas',
-    image: 'https://images.unsplash.com/photo-1506976785307-8732e854ad03?w=400&q=80',
+    image: require('../assets/images/Egg Chicken Red.jpg'),
     description: 'High quality local farm fresh eggs.'
   },
   {
@@ -56,7 +56,7 @@ export const products = [
     price: 1.99,
     category: 'Beverages',
     brand: 'Cocola',
-    image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&q=80',
+    image: require('../assets/images/Diet Coke.jpg'),
     description: 'Sugar-free refreshment.'
   },
   {
@@ -66,7 +66,7 @@ export const products = [
     price: 1.50,
     category: 'Beverages',
     brand: 'Cocola',
-    image: 'https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?w=400&q=80',
+    image: require('../assets/images/Sprite Can.jpg'),
     description: 'Lemon-lime soda.'
   },
   {
@@ -76,7 +76,7 @@ export const products = [
     price: 15.50,
     category: 'Beverages',
     brand: 'Individual',
-    image: 'https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400&q=80',
+    image: require('../assets/images/Apple & Grape Juice.jpg'),
     description: 'Fruit juice blend.'
   },
   {
@@ -86,7 +86,7 @@ export const products = [
     price: 4.99,
     category: 'Beverages',
     brand: 'Cocola',
-    image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&q=80',
+    image: require('../assets/images/Coca Cola Can.jpg'),
     description: 'Classic Coca Cola.'
   },
   {
@@ -96,7 +96,7 @@ export const products = [
     price: 4.99,
     category: 'Beverages',
     brand: 'Cocola',
-    image: 'https://images.unsplash.com/photo-1629203851288-7ece11236502?w=400&q=80',
+    image: require('../assets/images/Pepsi Can.jpg'),
     description: 'Refreshing Pepsi.'
   },
   {
@@ -106,7 +106,7 @@ export const products = [
     price: 3.50,
     category: 'Bakery & Snacks',
     brand: 'Cocola',
-    image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=400&q=80',
+    image: require('../assets/images/Egg Noodles.jpg'),
     description: 'Delicious egg noodles for quick meals.'
   },
   {
@@ -116,7 +116,7 @@ export const products = [
     price: 4.50,
     category: 'Dairy & Eggs',
     brand: 'Ifad',
-    image: 'https://images.unsplash.com/photo-1581006852262-e4307cf6283a?w=400&q=80',
+    image: require('../assets/images/Mayonnais.jpg'),
     description: 'Creamy mayonnaise.'
   }
 ];

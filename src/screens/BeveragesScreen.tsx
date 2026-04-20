@@ -3,12 +3,14 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { products } from '../data';
+import { useCart } from '../context/CartContext';
 
 const PRIMARY_COLOR = '#53B175';
 
 export default function BeveragesScreen() {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
+  const { addToCart } = useCart();
   const categoryName = route.params?.category || 'Beverages';
 
   const categoryProducts = useMemo(() => {
@@ -22,12 +24,12 @@ export default function BeveragesScreen() {
       style={styles.card}
       onPress={() => navigation.navigate('ProductDetail', { product: item })}
     >
-      <Image source={{ uri: item.image }} style={styles.cardImage} />
+      <Image source={typeof item.image === 'string' ? { uri: item.image } : item.image} style={styles.cardImage} />
       <Text style={styles.cardTitle}>{item.name}</Text>
       <Text style={styles.cardVolume}>{item.volume}</Text>
       <View style={styles.cardBottomRow}>
         <Text style={styles.cardPrice}>${item.price.toFixed(2)}</Text>
-        <TouchableOpacity style={styles.addButton} onPress={() => {}}>
+        <TouchableOpacity style={styles.addButton} onPress={() => addToCart(item)}>
           <Ionicons name="add" size={24} color="#FFF" />
         </TouchableOpacity>
       </View>
@@ -69,6 +71,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    width: '100%',
+    maxWidth: 800,
+    alignSelf: 'center',
   },
   header: {
     flexDirection: 'row',
